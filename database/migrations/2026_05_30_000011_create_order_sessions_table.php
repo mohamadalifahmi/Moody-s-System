@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->dateTime('opened_at');
             $table->dateTime('closed_at')->nullable();
-            $table->string()->default('open');
+            $table->string('status', 50)->default('open');
             $table->decimal('total_cash', 12, 2)->default(0);
             $table->decimal('total_card', 12, 2)->default(0);
             $table->decimal('total_other', 12, 2)->default(0);

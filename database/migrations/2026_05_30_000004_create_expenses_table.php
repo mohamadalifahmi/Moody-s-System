@@ -15,7 +15,7 @@ return new class extends Migration
             $table->decimal('amount', 12, 2);
             $table->text('description');
             $table->date('date');
-            $table->string()->default('cash');
+            $table->string('payment_method', 50)->default('cash');
             $table->string('receipt', 255)->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->timestamps();

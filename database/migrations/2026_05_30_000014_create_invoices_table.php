@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('total', 12, 2);
             $table->decimal('paid', 12, 2)->default(0);
             $table->decimal('due', 12, 2)->default(0);
-            $table->string()->default('draft');
+            $table->string('status', 50)->default('draft');
             $table->text('notes')->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->timestamps();

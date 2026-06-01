@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('tax', 12, 2)->default(0);
             $table->decimal('discount', 12, 2)->default(0);
             $table->decimal('total', 12, 2)->default(0);
-            $table->string()->default('pending');
-            $table->string()->default('unpaid');
+$table->string('status', 50)->default('pending');
+            $table->string('payment_status', 50)->default('unpaid');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
