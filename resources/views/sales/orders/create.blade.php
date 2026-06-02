@@ -236,9 +236,9 @@
         <div class="product-grid" id="productGrid">
             @foreach($categories as $category)
                 @foreach($category->products as $product)
-                    <div class="product-card" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ (float) $product->price }}" data-category="{{ $product->category_id }}">
+                    <div class="product-card" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ (float) $product->sale_price }}" data-category="{{ $product->category_id }}">
                         <div class="product-name">{{ $product->name }}</div>
-                        <div class="product-price">{{ CurrencyHelper::formatDual($product->price, $exchangeRate) }}</div>
+                        <div class="product-price">{{ CurrencyHelper::formatDual($product->sale_price, $exchangeRate) }}</div>
                     </div>
                 @endforeach
             @endforeach
