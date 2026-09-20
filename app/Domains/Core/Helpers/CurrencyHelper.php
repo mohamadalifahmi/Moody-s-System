@@ -4,9 +4,12 @@ namespace App\Domains\Core\Helpers;
 
 class CurrencyHelper
 {
-    public static function orderTypeLabel(string $orderType, string $businessType = 'general'): string
+    public static function orderTypeLabel(?string $orderType, string $businessType = 'general'): string
     {
         $labels = config("business.order_types.{$businessType}", config('business.order_types.general', []));
+        if (!$orderType) {
+            return $labels ? reset($labels) : 'مباشر';
+        }
         return $labels[$orderType] ?? $orderType;
     }
     public static function formatDual(float|int|string|null $amountUsd, float|int|string $rate = 89500): string
