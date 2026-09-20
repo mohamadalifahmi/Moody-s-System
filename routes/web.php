@@ -45,6 +45,7 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     // Settings
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::post('settings/clear-data', [SettingsController::class, 'clearAllData'])->name('settings.clear-data');
 
     // Search
     Route::get('search', [SearchController::class, 'index'])->name('search');
@@ -65,9 +66,11 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         Route::post('sessions', [OrderSessionController::class, 'store'])->name('sessions.store');
         Route::get('sessions/{id}', [OrderSessionController::class, 'show'])->name('sessions.show');
         Route::match(['post', 'patch'], 'sessions/{id}/close', [OrderSessionController::class, 'close'])->name('sessions.close');
+        Route::delete('sessions/{id}', [OrderSessionController::class, 'destroy'])->name('sessions.destroy');
 
         // Sales - Payments
         Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
+        Route::delete('payments/{id}', [PaymentController::class, 'destroy'])->name('payments.destroy');
     });
 
     // Expenses

@@ -100,19 +100,29 @@
                                 <th>طريقة الدفع</th>
                                 <th>المبلغ</th>
                                 <th>الوقت</th>
+                                <th>خيارات</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($order->payments as $payment)
                                 <tr>
                                     <td>
-                                        @if($payment->method == 'cash')<i class="fas fa-money-bill-wave text-success me-1"></i>نقداً
-                                        @elseif($payment->method == 'card')<i class="fas fa-credit-card text-primary me-1"></i>بطاقة
-                                        @else<i class="fas fa-ellipsis-h me-1"></i>{{ $payment->method }}
+                                        @if($payment->payment_method == 'cash')<i class="fas fa-money-bill-wave text-success me-1"></i>نقداً
+                                        @elseif($payment->payment_method == 'card')<i class="fas fa-credit-card text-primary me-1"></i>بطاقة
+                                        @else<i class="fas fa-ellipsis-h me-1"></i>{{ $payment->payment_method }}
                                         @endif
                                     </td>
                                     <td><span class="amount-cell">{{ CurrencyHelper::formatDual($payment->amount, $exchangeRate) }}</span></td>
                                     <td><span class="time-cell">{{ $payment->created_at->format('Y-m-d H:i') }}</span></td>
+                                    <td>
+                                        <form method="POST" action="{{ route('sales.payments.destroy', $payment) }}" data-confirm="هل أنت متأكد من حذف هذه الدفعة؟" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-action text-danger" title="حذف">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

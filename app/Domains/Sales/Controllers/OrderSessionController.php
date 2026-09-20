@@ -76,15 +76,15 @@ class OrderSessionController extends Controller
             ->findOrFail($id);
 
         $totalCash = $session->orders->sum(function ($order) {
-            return $order->payments->where('method', 'cash')->sum('amount');
+            return $order->payments->where('payment_method', 'cash')->sum('amount');
         });
 
         $totalCard = $session->orders->sum(function ($order) {
-            return $order->payments->where('method', 'card')->sum('amount');
+            return $order->payments->where('payment_method', 'card')->sum('amount');
         });
 
         $totalOther = $session->orders->sum(function ($order) {
-            return $order->payments->where('method', 'other')->sum('amount');
+            return $order->payments->where('payment_method', 'other')->sum('amount');
         });
 
         $session->update([
@@ -98,5 +98,17 @@ class OrderSessionController extends Controller
         session()->flash('success', 'تم إغلاق الفترة بنجاح');
 
         return redirect()->route('sales.sessions.show', $id);
+    }
+
+    public function destroy($id)
+    {
+        $session = OrderSession::where('tenant_id', Auth::user()->tenant_id)
+            ->findOrFail($id);
+
+        $session->delete();
+
+        session()->flash('success', 'تم حذف الفترة بنجاح');
+
+        return redirect()->route('sales.sessions.index');
     }
 }

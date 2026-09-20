@@ -13,7 +13,7 @@ class Payment extends Model
     use HasTenantScope, HasCreatorUpdater;
 
     protected $fillable = [
-        'order_id', 'invoice_id', 'amount', 'method', 'reference', 'notes', 'created_by',
+        'order_id', 'invoice_id', 'amount', 'payment_method', 'reference', 'notes', 'created_by',
     ];
 
     protected function casts(): array

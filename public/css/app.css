@@ -835,7 +835,12 @@ body {
 .card-body-custom { padding: 20px 24px; }
 
 /* ===== TABLES ===== */
-.dashboard-table { margin: 0; }
+.dashboard-table {
+    margin: 0;
+    --bs-table-bg: transparent;
+    background-color: transparent;
+    color: var(--text-secondary);
+}
 
 .dashboard-table thead th {
     font-size: 11px;
@@ -1859,3 +1864,23 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
 .flatpickr-time .numInputWrapper span.arrowDown:after { border-top-color: var(--gold); }
 
 .flatpickr-alt { direction: ltr; text-align: right; }
+
+/* ===== DARK THEME TABLE FIX (Bootstrap tables are white by default) ===== */
+.table {
+    --bs-table-bg: transparent;
+    background-color: transparent;
+    color: var(--text-secondary);
+}
+.table-light {
+    --bs-table-bg: rgba(255, 255, 255, 0.02) !important;
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    color: var(--text-secondary) !important;
+}
+.table-light th,
+.table-light td {
+    color: var(--text-secondary) !important;
+}
+.table-bordered {
+    --bs-border-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}

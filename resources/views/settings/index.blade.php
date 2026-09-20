@@ -19,6 +19,13 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
 <div class="content-card">
     <div class="card-header-custom">
         <h5><i class="fas fa-cog text-gold me-1"></i> إعدادات المنشأة</h5>
@@ -134,6 +141,29 @@
                 <button type="submit" class="btn btn-gold">
                     <i class="fas fa-save me-1"></i> حفظ الإعدادات
                 </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="content-card mt-4" style="border-right: 4px solid #e74c3c;">
+    <div class="card-header-custom">
+        <h5 class="text-danger"><i class="fas fa-exclamation-triangle text-danger me-1"></i> المنطقة الخطرة</h5>
+    </div>
+    <div class="card-body-custom">
+        <p class="text-muted mb-2"><i class="fas fa-trash-alt me-1"></i> مسح <strong>جميع</strong> بيانات المنشأة (الطلبات، الفواتير، المنتجات، المصاريف، الموردين، المشتريات، الديون، الفترات...). سيتم الاحتفاظ فقط بحسابك، اسم المنشأة، والإعدادات. <strong class="text-danger">هذا الإجراء لا يمكن التراجع عنه.</strong></p>
+        <form method="POST" action="{{ route('settings.clear-data') }}" id="clearDataForm">
+            @csrf
+            <div class="row g-2 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">اكتب اسم المنشأة لتأكيد المسح: <span class="text-warning">{{ $settings->name }}</span></label>
+                    <input type="text" name="confirm_text" class="form-control" placeholder="اكتب الاسم هنا..." required>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-danger w-100">
+                        <i class="fas fa-trash-alt me-1"></i> مسح كل البيانات
+                    </button>
+                </div>
             </div>
         </form>
     </div>

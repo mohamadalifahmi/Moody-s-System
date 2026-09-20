@@ -95,6 +95,15 @@
                                     <a href="{{ route('sales.sessions.show', $session) }}" class="btn-action" title="عرض">
                                         <i class="fas fa-eye"></i>
                                     </a>
+                                    @if($session->status == 'closed')
+                                    <form method="POST" action="{{ route('sales.sessions.destroy', $session) }}" data-confirm="هل أنت متأكد من حذف الفترة #{{ $session->session_number }}؟" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-action text-danger" title="حذف">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

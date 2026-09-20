@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     'use strict';
 
     var sidebar = document.getElementById('sidebar');
@@ -73,7 +73,7 @@
     document.addEventListener('click', function (e) {
         var confirmBtn = e.target.closest('[data-confirm]');
         if (confirmBtn) {
-            var message = confirmBtn.getAttribute('data-confirm') || 'هل أنت متأكد من تنفيذ هذا الإجراء؟';
+            var message = confirmBtn.getAttribute('data-confirm') || 'هل أنت متأكد من إتمام هذا الإجراء؟';
             if (!confirm(message)) {
                 e.preventDefault();
                 return false;
@@ -133,3 +133,4 @@
         }
     }
 })();
+

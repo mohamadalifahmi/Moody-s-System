@@ -2,10 +2,12 @@
 
 namespace App\Domains\Auth\Controllers;
 
+use App\Domains\Auth\Models\ActivityLog;
 use App\Domains\Auth\Models\Tenant;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends Controller
 {
@@ -63,6 +65,54 @@ class SettingsController extends Controller
         $tenant->update($updateData);
 
         session()->flash('success', 'تم تحديث الإعدادات بنجاح');
+
+        return redirect()->route('settings.index');
+    }
+
+    public function clearAllData(Request $request)
+    {
+        $tenantId = (int) Auth::user()->tenant_id;
+
+        $confirmed = $request->input('confirm_text');
+        $tenant = Tenant::findOrFail($tenantId);
+
+        if ($confirmed !== $tenant->name) {
+            session()->flash('error', 'لم يتم المسح: يجب كتابة اسم المنشأة بشكل صحيح للتأكيد');
+            return redirect()->route('settings.index');
+        }
+
+        DB::transaction(function () use ($tenantId) {
+            $orderIds = DB::table('orders')->where('tenant_id', $tenantId)->pluck('id');
+            $invoiceIds = DB::table('invoices')->where('tenant_id', $tenantId)->pluck('id');
+            $purchaseIds = DB::table('purchases')->where('tenant_id', $tenantId)->pluck('id');
+
+            DB::table('order_items')->whereIn('order_id', $orderIds)->delete();
+            DB::table('invoice_items')->whereIn('invoice_id', $invoiceIds)->delete();
+            DB::table('purchase_items')->whereIn('purchase_id', $purchaseIds)->delete();
+            DB::table('payments')->where('tenant_id', $tenantId)->delete();
+
+            DB::table('stock_movements')->where('tenant_id', $tenantId)->delete();
+            DB::table('invoices')->where('tenant_id', $tenantId)->delete();
+            DB::table('orders')->where('tenant_id', $tenantId)->delete();
+            DB::table('order_sessions')->where('tenant_id', $tenantId)->delete();
+            DB::table('purchases')->where('tenant_id', $tenantId)->delete();
+            DB::table('debts')->where('tenant_id', $tenantId)->delete();
+            DB::table('expenses')->where('tenant_id', $tenantId)->delete();
+            DB::table('expense_categories')->where('tenant_id', $tenantId)->delete();
+            DB::table('products')->where('tenant_id', $tenantId)->delete();
+            DB::table('product_categories')->where('tenant_id', $tenantId)->delete();
+            DB::table('suppliers')->where('tenant_id', $tenantId)->delete();
+            DB::table('activity_logs')->where('tenant_id', $tenantId)->delete();
+        });
+
+        ActivityLog::create([
+            'tenant_id' => $tenantId,
+            'user_id' => Auth::id(),
+            'action' => 'clear_all_data',
+            'description' => 'تم مسح جميع بيانات المنشأة',
+        ]);
+
+        session()->flash('success', 'تم مسح جميع البيانات بنجاح');
 
         return redirect()->route('settings.index');
     }

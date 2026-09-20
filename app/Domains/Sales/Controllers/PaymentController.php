@@ -22,7 +22,7 @@ class PaymentController extends Controller
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
             'amount' => 'required|numeric|min:0.01',
-            'method' => 'required|in:cash,card,other',
+            'payment_method' => 'required|in:cash,card,other',
             'reference' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:1000',
         ]);
@@ -34,7 +34,7 @@ class PaymentController extends Controller
             'tenant_id' => Auth::user()->tenant_id,
             'order_id' => $order->id,
             'amount' => $validated['amount'],
-            'method' => $validated['method'],
+            'payment_method' => $validated['payment_method'],
             'reference' => $validated['reference'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'created_by' => Auth::id(),
@@ -60,5 +60,39 @@ class PaymentController extends Controller
         session()->flash('success', 'تم تسجيل الدفعة بنجاح');
 
         return redirect()->route('sales.orders.show', $order->id);
+    }
+
+    public function destroy($id)
+    {
+        $payment = Payment::where('tenant_id', Auth::user()->tenant_id)
+            ->findOrFail($id);
+
+        $order = $payment->order;
+
+        $payment->delete();
+
+        if ($order) {
+            $totalPaid = $order->payments()->sum('amount');
+            if ($totalPaid <= 0) {
+                $order->update(['payment_status' => 'unpaid']);
+            } elseif ($totalPaid < $order->total) {
+                $order->update(['payment_status' => 'partial']);
+            } else {
+                $order->update(['payment_status' => 'paid']);
+            }
+        }
+
+        ActivityLog::create([
+            'tenant_id' => Auth::user()->tenant_id,
+            'user_id' => Auth::id(),
+            'action' => 'delete_payment',
+            'description' => 'تم حذف دفعة من الطلب رقم ' . ($order->order_number ?? ''),
+            'subject_type' => Payment::class,
+            'subject_id' => $id,
+        ]);
+
+        session()->flash('success', 'تم حذف الدفعة بنجاح');
+
+        return redirect()->route('sales.orders.show', $order ? $order->id : $payment->order_id);
     }
 }
