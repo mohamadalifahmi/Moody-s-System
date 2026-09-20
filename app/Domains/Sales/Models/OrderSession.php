@@ -34,8 +34,48 @@ class OrderSession extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function openedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'session_id');
+    }
+
+    public function getSessionNumberAttribute(): string
+    {
+        return 'S-' . str_pad((string) $this->id, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function getOrdersCountAttribute(): int
+    {
+        return $this->relationLoaded('orders') ? $this->orders->count() : $this->orders()->count();
+    }
+
+    public function getTotalCashAttribute(): float
+    {
+        return (float) $this->orders->flatMap->payments->where('payment_method', 'cash')->sum('amount');
+    }
+
+    public function getTotalCardAttribute(): float
+    {
+        return (float) $this->orders->flatMap->payments->where('payment_method', 'card')->sum('amount');
+    }
+
+    public function getTotalOtherAttribute(): float
+    {
+        return (float) $this->orders->flatMap->payments->where('payment_method', 'other')->sum('amount');
+    }
+
+    public function getGrandTotalAttribute(): float
+    {
+        return $this->total_cash + $this->total_card + $this->total_other;
+    }
+
+    public function getTotalAmountAttribute(): float
+    {
+        return (float) $this->orders->sum('total');
     }
 }

@@ -69,6 +69,14 @@ class SalesController extends Controller
 
     public function store(Request $request)
     {
+        $itemsJson = $request->input('items');
+        if (is_string($itemsJson)) {
+            $decoded = json_decode($itemsJson, true);
+            if (is_array($decoded)) {
+                $request->merge(['items' => $decoded]);
+            }
+        }
+
         $validated = $request->validate([
             'session_id' => 'required|exists:order_sessions,id',
             'items' => 'required|array|min:1',
