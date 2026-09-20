@@ -12,13 +12,21 @@
                         <div class="auth-logo">
                             <svg viewBox="0 0 40 40" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
-                                    <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#d4a853"/>
-                                        <stop offset="100%" stop-color="#a07820"/>
+                                    <linearGradient id="alg" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0" stop-color="#232334"/>
+                                        <stop offset="0.6" stop-color="#14141f"/>
+                                        <stop offset="1" stop-color="#0a0a11"/>
+                                    </linearGradient>
+                                    <linearGradient id="ag" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0" stop-color="#f7df9b"/>
+                                        <stop offset="0.4" stop-color="#e8bd4f"/>
+                                        <stop offset="0.8" stop-color="#c9962b"/>
+                                        <stop offset="1" stop-color="#9a6c12"/>
                                     </linearGradient>
                                 </defs>
-                                <path d="M20 3L35 10v13c0 8-15 14-15 14S5 31 5 23V10z" fill="url(#sg)"/>
-                                <text x="20" y="26" text-anchor="middle" fill="#0c0c14" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="18">M</text>
+                                <rect x="0" y="0" width="40" height="40" rx="9.2" fill="url(#alg)"/>
+                                <rect x="1.3" y="1.3" width="37.4" height="37.4" rx="7.8" fill="none" stroke="#e8bd4f" stroke-opacity="0.35" stroke-width="0.7"/>
+                                <path d="M7.9 29.7 L7.9 14.9 L13.5 14.9 L20 24.5 L26.5 14.9 L32.2 14.9 L32.2 29.7 L26.6 29.7 L26.6 22.8 L20 28.8 L13.4 22.8 L13.4 29.7 Z" fill="url(#ag)"/>
                             </svg>
                         </div>
                         <span class="auth-brand-name">Moody's</span>

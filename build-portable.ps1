@@ -184,27 +184,33 @@ timeout /t 1 /nobreak >nul
 "@ | Out-File -FilePath "$OutputDir\stop.bat" -Encoding ASCII
 
 # --- favicon / installer icon ---
-Write-Host "[+] Generating icon..." -ForegroundColor Cyan
-try {
-    Add-Type -AssemblyName System.Drawing -ErrorAction Stop
-    $faviconPath = "$OutputDir\app-icon.ico"
-    $bmp = New-Object System.Drawing.Bitmap 32,32
-    $g = [System.Drawing.Graphics]::FromImage($bmp)
-    $g.Clear([System.Drawing.Color]::FromArgb(26, 26, 46))
-    $brush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(212, 168, 83))
-    $g.FillEllipse($brush, 6, 6, 20, 20)
-    $font = New-Object System.Drawing.Font("Tahoma", 13, [System.Drawing.FontStyle]::Bold)
-    $textBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(26, 26, 46))
-    $g.DrawString("M", $font, $textBrush, 8, 4)
-    $g.Dispose(); $brush.Dispose(); $font.Dispose(); $textBrush.Dispose()
-    $hIcon = $bmp.GetHicon()
-    $icon = [System.Drawing.Icon]::FromHandle($hIcon)
-    $fs = New-Object System.IO.FileStream($faviconPath, [System.IO.FileMode]::Create)
-    $icon.Save($fs); $fs.Close()
-    $icon.Dispose(); $bmp.Dispose()
-    Write-Host "      icon generated" -ForegroundColor Green
-} catch {
-    Write-Host "      icon skipped ($_)" -ForegroundColor Yellow
+Write-Host "[+] Using premium app icon..." -ForegroundColor Cyan
+$genIco = "$PSScriptRoot\generated\app-icon.ico"
+if (Test-Path $genIco) {
+    Copy-Item $genIco "$OutputDir\app-icon.ico" -Force
+    Write-Host "      app-icon.ico copied from generated assets" -ForegroundColor Green
+} else {
+    try {
+        Add-Type -AssemblyName System.Drawing -ErrorAction Stop
+        $faviconPath = "$OutputDir\app-icon.ico"
+        $bmp = New-Object System.Drawing.Bitmap 32,32
+        $g = [System.Drawing.Graphics]::FromImage($bmp)
+        $g.Clear([System.Drawing.Color]::FromArgb(26, 26, 46))
+        $brush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(212, 168, 83))
+        $g.FillEllipse($brush, 6, 6, 20, 20)
+        $font = New-Object System.Drawing.Font("Tahoma", 13, [System.Drawing.FontStyle]::Bold)
+        $textBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(26, 26, 46))
+        $g.DrawString("M", $font, $textBrush, 8, 4)
+        $g.Dispose(); $brush.Dispose(); $font.Dispose(); $textBrush.Dispose()
+        $hIcon = $bmp.GetHicon()
+        $icon = [System.Drawing.Icon]::FromHandle($hIcon)
+        $fs = New-Object System.IO.FileStream($faviconPath, [System.IO.FileMode]::Create)
+        $icon.Save($fs); $fs.Close()
+        $icon.Dispose(); $bmp.Dispose()
+        Write-Host "      fallback icon generated" -ForegroundColor Yellow
+    } catch {
+        Write-Host "      icon skipped ($_)" -ForegroundColor Yellow
+    }
 }
 
 Write-Host ""
