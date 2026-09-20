@@ -28,7 +28,7 @@ if (Test-Path $OutputDir) {
 New-Item -ItemType Directory -Path "$OutputDir\app" -Force | Out-Null
 
 Write-Host "[1/6] Copying application files..." -ForegroundColor Cyan
-$exclude = @('vendor', 'node_modules', '.git', 'storage\logs', 'build', 'desktop', 'database\database.sqlite')
+$exclude = @("$PSScriptRoot\vendor", 'node_modules', '.git', 'storage\logs', 'build', 'desktop', 'database\database.sqlite')
 robocopy $PSScriptRoot "$OutputDir\app" /E /XD $exclude /XF '.env' /NFL /NDL /NJH /NJS /NP | Out-Null
 
 # Ensure writable storage dirs exist

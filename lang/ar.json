@@ -1,0 +1,20 @@
+{
+    "Account Information": "معلومات الحساب",
+    "Name": "الاسم",
+    "Email Address": "البريد الإلكتروني",
+    "Password": "كلمة المرور",
+    "Confirm Password": "تأكيد كلمة المرور",
+    "Business Information": "معلومات العمل",
+    "Business Name": "اسم العمل",
+    "Business Slug": "معرّف العمل",
+    "Register": "تسجيل",
+    "Already have an account?": "لديك حساب بالفعل؟",
+    "Don't have an account?": "ليس لديك حساب؟",
+    "Remember Me": "تذكرني",
+    "Login": "تسجيل الدخول",
+    "Forgot Your Password?": "نسيت كلمة المرور؟",
+    "Register a new restaurant": "سجّل مطعمك الآن",
+    "Reset Password": "إعادة تعيين كلمة المرور",
+    "Send Password Reset Link": "إرسال رابط إعادة التعيين",
+    "Back to Login": "العودة لتسجيل الدخول"
+}
