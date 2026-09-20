@@ -3,6 +3,7 @@
 .env
 .env.backup
 .env.production
+.env.mysql.bak
 .phpactor.json
 .phpunit.result.cache
 /.fleet
@@ -12,6 +13,8 @@
 /.vscode
 /.zed
 /auth.json
+/build
+/database/database.sqlite
 /node_modules
 /public/build
 /public/hot
